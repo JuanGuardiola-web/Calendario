@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; }
+        .container { max-width: 400px; margin: 100px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        button { width: 100%; padding: 10px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .error { color: red; }
+        .calendar { display: none; margin-top: 20px; }
+        .calendar div { display: inline-block; width: 40px; height: 40px; border: 1px solid #ccc; margin: 5px; line-height: 40px; background: white; cursor: pointer; }
+        .day-shift { background: yellow; }
+        .night-shift { background: blue; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container" id="login-container">
+        <h2>Iniciar Sesión</h2>
+        <input type="text" id="username" placeholder="Usuario">
+        <input type="password" id="password" placeholder="Contraseña">
+        <p class="error" id="error-message" style="display:none;">Usuario o contraseña incorrectos</p>
+        <button onclick="login()">Entrar</button>
+    </div>
+
+    <div class="container calendar" id="calendar-container">
+        <h2>Calendario</h2>
+        <div id="calendar"></div>
+        <button style="background: yellow;" onclick="setShift('day')">Semana de día</button>
+        <button style="background: blue; color: white;" onclick="setShift('night')">Semana de noche</button>
+    </div>
+
+    <script>
+        function login() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            if (user === "usuario" && pass === "contraseña") {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('calendar-container').style.display = 'block';
+                generateCalendar();
+            } else {
+                document.getElementById('error-message').style.display = 'block';
+            }
+        }
+
+        function generateCalendar() {
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+            for (let i = 1; i <= 30; i++) {
+                let day = document.createElement('div');
+                day.textContent = i;
+                day.onclick = function() { toggleShift(day); };
+                calendar.appendChild(day);
+            }
+        }
+
+        function setShift(shift) {
+            document.querySelectorAll('#calendar div').forEach(day => {
+                day.className = shift === 'day' ? 'day-shift' : 'night-shift';
+            });
+        }
+
+        function toggleShift(day) {
+            if (day.classList.contains('day-shift')) {
+                day.classList.remove('day-shift');
+                day.classList.add('night-shift');
+            } else if (day.classList.contains('night-shift')) {
+                day.classList.remove('night-shift');
+            } else {
+                day.classList.add('day-shift');
+            }
+        }
+    </script>
+</body>
+</html>
